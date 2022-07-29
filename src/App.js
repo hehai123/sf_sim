@@ -7,8 +7,8 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route exact path="/" element={<Starforce />} />
-          <Route path="/data" element={<Data />} />
+          <Route exact path="/sf_sim" element={<Starforce />} />
+          <Route path="/sf_sim/data" element={<Data />} />
         </Routes>
       </Router>
     </>

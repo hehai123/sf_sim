@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/sf_sim/static/css/main.bab4cbf0.css",
-    "main.js": "/sf_sim/static/js/main.55d95978.js",
+    "main.js": "/sf_sim/static/js/main.bec13ce2.js",
     "index.html": "/sf_sim/index.html",
     "main.bab4cbf0.css.map": "/sf_sim/static/css/main.bab4cbf0.css.map",
-    "main.55d95978.js.map": "/sf_sim/static/js/main.55d95978.js.map"
+    "main.bec13ce2.js.map": "/sf_sim/static/js/main.bec13ce2.js.map"
   },
   "entrypoints": [
     "static/css/main.bab4cbf0.css",
-    "static/js/main.55d95978.js"
+    "static/js/main.bec13ce2.js"
   ]
 }

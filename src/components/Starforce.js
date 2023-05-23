@@ -9,9 +9,10 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { MDBInput } from "mdb-react-ui-kit";
+import { MDBTooltip } from "mdb-react-ui-kit";
 
 export default function Starforce() {
-  const [currentStar, setCurrentStar] = useState(10);
+  const [currentStar, setCurrentStar] = useState(12);
   const [successRate, setSuccessRate] = useState(50);
   const [failRate, setFailRate] = useState(50);
   const [destroyRate, setDestroyRate] = useState(0);
@@ -22,6 +23,8 @@ export default function Starforce() {
   const [fiveTen, setFiveTen] = useState(false);
   const [starForceOff, setstarForceOff] = useState(false);
   const [starCatcher, setStarCatcher] = useState(false);
+  const [starResetNumber, setStarResetNumber] = useState(12);
+  const [autoReset, setAutoReset] = useState(false);
   const [equipLevel, setEquipLevel] = useState(0);
   const [mvp, setMvp] = useState("None");
   const [premiumService, setpremiumService] = useState(false);
@@ -30,21 +33,21 @@ export default function Starforce() {
   const [starForceCostDiscounted, setStarForceCostDiscounted] = useState(0);
 
   const [stats, setStats] = useState([
-    { star: "10 > 11", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "11 > 12", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "12 > 13", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "13 > 14", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "14 > 15", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "15 > 16", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "16 > 17", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "17 > 18", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "18 > 19", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "19 > 20", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "20 > 21", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "21 > 22", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "22 > 23", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "23 > 24", pass: 0, failed: 0, boom: 0, total: 0 },
-    { star: "24 > 25", pass: 0, failed: 0, boom: 0, total: 0 },
+    { star: "10 > 11", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "11 > 12", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "12 > 13", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "13 > 14", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "14 > 15", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "15 > 16", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "16 > 17", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "17 > 18", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "18 > 19", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "19 > 20", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "20 > 21", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "21 > 22", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "22 > 23", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "23 > 24", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
+    { star: "24 > 25", pass: 0, failed: 0, boom: 0, total: 0, cost: 0 },
   ]);
 
   const [totalStats, setTotalStats] = useState({
@@ -53,6 +56,7 @@ export default function Starforce() {
     failed: 0,
     boom: 0,
     total: 0,
+    cost: 0,
   });
 
   const handleRandom = () => {
@@ -60,14 +64,21 @@ export default function Starforce() {
     return number;
   };
 
-  const handleStarForceRates = (stars) => {
+  const handleStarForceRates = (star = currentStar) => {
     var increaseRates = 1; // For star catcher rate
     var passChance = 0; // sf success rate at that star
 
     //Increase succes rate by 5% if using star catcher
     if (starCatcher === true) increaseRates = 1.05;
 
-    switch (stars) {
+    if (chanceMessage === "Chance Time!") {
+      setSuccessRate(100);
+      setFailRate(0);
+      setDestroyRate(0);
+      return;
+    }
+
+    switch (star) {
       case 0:
         passChance = 95 * increaseRates;
         setSuccessRate(passChance);
@@ -210,13 +221,13 @@ export default function Starforce() {
         setDestroyRate((100 - passChance) * 0.2);
         break;
       case 23:
-        passChance = 3 * increaseRates;
+        passChance = 2 * increaseRates;
         setSuccessRate(passChance);
         setFailRate((100 - passChance) * 0.7);
         setDestroyRate((100 - passChance) * 0.3);
         break;
       case 24:
-        passChance = 3 * increaseRates;
+        passChance = 1 * increaseRates;
         setSuccessRate(passChance);
         setFailRate((100 - passChance) * 0.6);
         setDestroyRate((100 - passChance) * 0.4);
@@ -231,16 +242,36 @@ export default function Starforce() {
     }
   };
 
+  useEffect(() => {
+    handleStarForceRates();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStar, chanceMessage, starCatcher]);
+
+  //setting table data
   const starForceStats = (stars, outcome) => {
     const statss = [...stats];
-    statss[stars - 10][outcome] += 1;
-    statss[stars - 10].total += 1;
+
+    const cost =
+      starForceCostDiscounted === 0 ? starForceCost : starForceCostDiscounted;
+    statss[stars - 10].cost += cost;
+
+    if (outcome !== "chance") {
+      statss[stars - 10][outcome] += 1;
+      statss[stars - 10].total += 1;
+
+      setTotalStats({
+        ...totalStats,
+        [outcome]: totalStats[outcome] + 1,
+        total: totalStats.total + 1,
+        cost: totalStats.cost + cost,
+      });
+    } else {
+      setTotalStats({
+        ...totalStats,
+        cost: totalStats.cost + cost,
+      });
+    }
     setStats(statss);
-    setTotalStats({
-      ...totalStats,
-      [outcome]: totalStats[outcome] + 1,
-      total: totalStats.total + 1,
-    });
   };
 
   const handleStarForce = () => {
@@ -248,6 +279,7 @@ export default function Starforce() {
 
     if (chanceTime === 2) {
       setChanceTime(0);
+      starForceStats(currentStar, "chance");
       setMessage("Chance time success!");
       setMessageColor("primary");
       setCurrentStar(currentStar + 1);
@@ -258,18 +290,11 @@ export default function Starforce() {
       starForceStats(currentStar, "boom");
       setMessage("Destroyed at " + currentStar + " stars");
       setMessageColor("danger");
-      // console.log(
-      //   "%cBoomed at",
-      //   "color:red",
-      //   currentStar,
-      //   "starting from 12 stars"
-      // );
-      setCurrentStar(12);
-      handleStarForceRates(12);
+      setCurrentStar(starResetNumber);
+      handleStarForceRates(starResetNumber);
     } else if (roll <= failRate + destroyRate) {
       starForceStats(currentStar, "failed");
       if (currentStar === 15 || currentStar === 20 || currentStar < 11) {
-        // console.log("Failed, star remains the same");
         setMessage("Failed, star remains");
         setMessageColor("warning");
         setChanceTime(0);
@@ -282,17 +307,28 @@ export default function Starforce() {
         setMessageColor("warning");
         setCurrentStar(currentStar - 1);
         setChanceTime(chanceTime + 1);
-        // console.log("Failed, star dropped");
       }
     } else {
-      starForceStats(currentStar, "pass");
-      setMessage("Success!");
-      setMessageColor("success");
-      setCurrentStar(currentStar + 1);
-      handleStarForceRates(currentStar + 1);
+      if (autoReset === true && currentStar === 21) {
+        setMessage("22 stars! Auto reseted.");
+        starForceStats(currentStar, "pass");
+        setCurrentStar(starResetNumber);
+        handleStarForceRates(starResetNumber);
+      } else {
+        starForceStats(currentStar, "pass");
+        setMessage("Success!");
+        setCurrentStar(currentStar + 1);
+        handleStarForceRates(currentStar + 1);
+      }
       setChanceTime(0);
-      // console.log("%cSuccess!", "color:green", currentStar);
+      setMessageColor("success");
     }
+  };
+
+  const handleResetButton = () => {
+    setCurrentStar(starResetNumber);
+    setChanceTime(0);
+    setChanceMessage("");
   };
 
   const handleFiveTen = (checked) => {
@@ -655,7 +691,7 @@ export default function Starforce() {
             (Math.pow(equipLevel, 3) * Math.pow(currentStar + 1, 2.7)) / 20000 +
               10
           );
-        costAfter = 0;
+        costAfter = costBefore * multiplier;
         break;
       default:
         break;
@@ -670,10 +706,10 @@ export default function Starforce() {
     setStarForceCost(costBefore);
   };
 
-  // const safeParseInt = (value) => {
-  //   const num = parseInt(value);
-  //   return isNaN(num) ? 0 : num;
-  // };
+  const safeParseInt = (value) => {
+    const num = parseInt(value);
+    return isNaN(num) ? 0 : num;
+  };
 
   useEffect(() => {
     handlestarForceCost();
@@ -692,45 +728,92 @@ export default function Starforce() {
   return (
     <>
       <Navigate />
-      <Container className="fluid align-items-center justify-content-center mt-4">
-        <Row>
+      <Container
+        className="fluid align-items-center justify-content-center mt-4"
+        fluid="md"
+      >
+        <Card className="w-100 mx-auto mb-3" style={{ maxWidth: "800px" }}>
+          <Card.Body>
+            <Card.Text>
+              Select the options you want and click starforce.
+            </Card.Text>
+            <Card.Text>
+              Starforce{" "}
+              <MDBTooltip
+                tag="a"
+                wrapperProps={{ href: "#" }}
+                title="To avoid distorting results %"
+              >
+                attemps
+              </MDBTooltip>{" "}
+              with chance time will not be included. However, the cost will
+              still be added.
+            </Card.Text>
+          </Card.Body>
+        </Card>
+        <Row xs={1} md={2} className="justify-content-md-center">
           <Col>
-            <Card className="w-100 mx-auto" style={{ maxWidth: "400px" }}>
+            <Card
+              className="w-100 mx-auto"
+              style={{ maxWidth: "400px" }}
+              border="primary"
+            >
+              <Card.Header className="text-center">Settings</Card.Header>
               <Card.Body>
                 <Form>
-                  <Form.Check
-                    type="checkbox"
-                    label="Star catcher"
-                    id="star-catcher"
-                    onChange={(event) =>
-                      handleStarCatcher(event.target.checked)
-                    }
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    label="5/10/15 100%"
-                    id="five-ten"
-                    onChange={(event) => handleFiveTen(event.target.checked)}
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    label="30% off cost"
-                    onChange={(event) => setstarForceOff(event.target.checked)}
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    label="Anti-destruction"
-                    onChange={(event) =>
-                      setAntiDestruction(event.target.checked)
-                    }
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    label="Premium service coupon"
-                    onChange={(event) =>
-                      setpremiumService(event.target.checked)
-                    }
-                  />
+                  <Row>
+                    <Col>
+                      <Form.Check
+                        type="checkbox"
+                        label="Star catcher"
+                        id="star-catcher"
+                        onChange={(event) =>
+                          handleStarCatcher(event.target.checked)
+                        }
+                      />
+                      <Form.Check
+                        type="checkbox"
+                        label="5/10/15 100%"
+                        id="five-ten"
+                        onChange={(event) =>
+                          handleFiveTen(event.target.checked)
+                        }
+                      />
+                      <Form.Check
+                        type="checkbox"
+                        label="30% off cost"
+                        id="30 off"
+                        onChange={(event) =>
+                          setstarForceOff(event.target.checked)
+                        }
+                      />
+                      <Form.Check
+                        type="checkbox"
+                        label="Anti-destruction"
+                        id="anti-destruction"
+                        onChange={(event) =>
+                          setAntiDestruction(event.target.checked)
+                        }
+                      />
+                    </Col>
+                    <Col>
+                      <Form.Check
+                        type="checkbox"
+                        label="Premium service coupon"
+                        id="premium service coupon"
+                        onChange={(event) =>
+                          setpremiumService(event.target.checked)
+                        }
+                      />
+                      <Form.Check
+                        type="checkbox"
+                        id="reset"
+                        label={`Auto reset after reaching 22 stars`}
+                        onChange={(event) => setAutoReset(event.target.checked)}
+                      />
+                    </Col>
+                  </Row>
+
                   <Form.Select
                     //size="sm"
                     onChange={(event) => setMvp(event.target.value)}
@@ -746,55 +829,72 @@ export default function Starforce() {
                     label="Equipment level"
                     id="form1"
                     type="number"
-                    onChange={(event) => setEquipLevel(event.target.value)}
+                    min="0"
+                    onChange={(event) =>
+                      setEquipLevel(
+                        Math.floor(safeParseInt(event.target.value) / 10) * 10
+                      )
+                    }
                     //size="sm"
+                  />
+                  <MDBInput
+                    className="mt-3"
+                    label="Starting / Reset star"
+                    id="form2"
+                    type="number"
+                    min="10"
+                    max="24"
+                    onChange={(event) =>
+                      setStarResetNumber(safeParseInt(event.target.value))
+                    }
+                    defaultValue="12"
                   />
                 </Form>
               </Card.Body>
             </Card>
           </Col>
           <Col>
-            <Card className="w-100 mx-auto" style={{ maxWidth: "500px" }}>
-              <Card.Body>
-                <Row>
-                  <Col>
-                    <Card.Text>
-                      {currentStar} &gt; {currentStar + 1} &nbsp;{" "}
-                      {chanceMessage}
-                    </Card.Text>
-                    <Card.Text>
-                      Success: &nbsp; {successRate.toFixed(2)}%
-                    </Card.Text>
-                    <Card.Text>Fail: &nbsp; {failRate.toFixed(2)}%</Card.Text>
-                    <Card.Text>
-                      Boom: &nbsp; {destroyRate.toFixed(2)}%
-                    </Card.Text>
-                  </Col>
-                  <Col>
-                    <Card.Text>Meso cost</Card.Text>
-                    <Card.Text>
-                      {starForceCostDiscounted === 0 ? (
-                        starForceCost.toLocaleString()
-                      ) : (
-                        <del>{starForceCost.toLocaleString()}</del>
-                      )}
-                      &ensp;
-                      {starForceCostDiscounted === 0
-                        ? ""
-                        : starForceCostDiscounted.toLocaleString()}
-                    </Card.Text>
-                  </Col>
-                </Row>
-                <Row className="justify-content-md-center mx-auto">
-                  <Col>
-                    <Button onClick={handleStarForce}>Star force</Button>
-                  </Col>
-                </Row>
-              </Card.Body>
+            <Card
+              className="w-100 mx-auto mt-2 mt-md-0"
+              style={{ maxWidth: "400px" }}
+              border="primary"
+            >
+              <Card.Header className="text-center">Star Force</Card.Header>
+              <Row className="ps-3 mt-2">
+                <Card.Text>
+                  {currentStar} &gt; {currentStar + 1} &nbsp; {chanceMessage}
+                  <br />
+                  Success rate: &nbsp; {successRate.toFixed(2)}% <br />
+                  Fail rate: &nbsp; {failRate.toFixed(2)}% <br />
+                  Boom rate: &nbsp; {destroyRate.toFixed(2)}%
+                </Card.Text>
+                <Card.Text className="text-center">
+                  Meso cost <br />
+                  {starForceCostDiscounted === 0 ? (
+                    starForceCost.toLocaleString()
+                  ) : (
+                    <del>{starForceCost.toLocaleString()}</del>
+                  )}
+                  &ensp;
+                  {starForceCostDiscounted === 0
+                    ? ""
+                    : starForceCostDiscounted.toLocaleString()}
+                </Card.Text>
+              </Row>
+              <Row className="mt-2 mb-2 ms-5">
+                <Col>
+                  <Button onClick={handleStarForce}>Star force</Button>
+                </Col>
+                <Col>
+                  <Button variant="secondary" onClick={handleResetButton}>
+                    Reset star
+                  </Button>
+                </Col>
+              </Row>
             </Card>
             {message && (
               <Alert
-                className="w-100 mx-auto mt-2 text-center"
+                className="w-100 mx-auto mt-2 text-center p-1"
                 style={{ maxWidth: "400px" }}
                 variant={messageColor}
               >
@@ -803,8 +903,7 @@ export default function Starforce() {
             )}
           </Col>
         </Row>
-
-        <Table striped bordered hover className="mt-3" size="sm">
+        <Table striped bordered hover className="mt-3 text-center" responsive>
           <thead>
             <tr>
               <th>Star</th>
@@ -814,7 +913,8 @@ export default function Starforce() {
               <th>Fail %</th>
               <th>Boom</th>
               <th>Boom %</th>
-              <th>Total Atempts</th>
+              <th>Attempts</th>
+              <th>Cost</th>
             </tr>
           </thead>
           <tbody>
@@ -839,6 +939,7 @@ export default function Starforce() {
                   : ((totalStats.pass / totalStats.total) * 100).toFixed(2)}
               </td>
               <td>{totalStats.total.toLocaleString()}</td>
+              <td>{totalStats.cost.toLocaleString()}</td>
             </tr>
             {stats.map((stats, id) => (
               <tr key={id}>
@@ -862,6 +963,7 @@ export default function Starforce() {
                     : ((stats.boom / stats.total) * 100).toFixed(2)}
                 </td>
                 <td>{stats.total.toLocaleString()}</td>
+                <td>{stats.cost.toLocaleString()}</td>
               </tr>
             ))}
           </tbody>

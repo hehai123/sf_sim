@@ -52,7 +52,7 @@ export default function Simdata() {
           </Card.Body>
         </Card>
 
-        <Table striped bordered hover className="mt-3" size="sm">
+        <Table striped bordered hover className="mt-3" responsive>
           <thead>
             <tr>
               <th>Star</th>
@@ -62,7 +62,7 @@ export default function Simdata() {
               <th>Fail %</th>
               <th>Boom</th>
               <th>Boom %</th>
-              <th>Total Atempts</th>
+              <th>Total Attempts</th>
             </tr>
           </thead>
           <tbody>
